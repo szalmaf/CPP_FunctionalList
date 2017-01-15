@@ -11,9 +11,35 @@
 
 template<class T>
 class List {
+    struct Item;
 public:
-    List(); // empty list constructor
-    List(T val, List tail); // x:xs recursive constructor
+    List() : _head(nullptr){}; // empty list constructor
+    List(T v, List tail) : _head(new Item(v, tail._head)){} ; // x:xs recursive constructor; tail won't change ever, it's persistent
+    
+    bool isEmpty() const {return !_head;}
+    
+    T front() const
+    {
+        assert(!isEmpty());
+        return _head->_val;
+    }
+    List pop_front() const
+    {
+        assert(!isEmpty());
+        return List(_head->_next);
+    }
+    
+private:
+    explicit List(Item const * items) : _head(items) {} //private constructor used in pop_front()
+    struct Item
+    {
+        Item(T v, Item const * tail) : _val(v), _next(tail) {}
+        T _val;
+        Item const * _next;
+    };
+
+    //may be null
+    Item const * _head; // shallow constness but meant to mean deep const by recursion
 };
 
 
