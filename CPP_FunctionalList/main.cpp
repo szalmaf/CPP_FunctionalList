@@ -12,9 +12,9 @@
 template<class T>
 class List {
 public:
-    List();
-    List(T val, List tail);
-}
+    List(); // empty list constructor
+    List(T val, List tail); // x:xs recursive constructor
+};
 
 
 int main(int argc, const char * argv[]) {
