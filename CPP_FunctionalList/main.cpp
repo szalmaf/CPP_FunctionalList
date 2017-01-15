@@ -13,13 +13,13 @@ template<class T>
 class List {
     struct Item
     {
-        Item(T v, Item const * tail) : _val(v), _next(tail) {}
+        Item(T v, std::shared_ptr<const Item> const & tail) : _val(v), _next(tail) {}
         T _val;
-        Item const * _next;
+        std::shared_ptr<const Item> _next;
     };
 public:
-    List() : _head(nullptr){}; // empty list constructor
-    List(T v, List tail) : _head(new Item(v, tail._head)){} ; // x:xs recursive constructor; tail won't change ever, it's persistent
+    List() {} // empty list constructor
+    List(T v, List const & tail) : _head(std::make_shared<Item>(v, tail._head)) {} // x:xs recursive constructor; tail won't change ever, it's persistent
 
     bool isEmpty() const {return !_head;}
     
@@ -41,7 +41,7 @@ public:
 private:
     explicit List(Item const * items) : _head(items) {} //private constructor used in pop_front()
     //may be null
-    Item const * _head; // shallow constness but meant to mean deep const by recursion
+    std::shared_ptr<const Item> _head; // shallow constness but meant to mean deep const by recursion
 };
 
 
