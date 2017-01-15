@@ -8,6 +8,15 @@
 
 #include <iostream>
 
+
+template<class T>
+class List {
+public:
+    List();
+    List(T val, List tail);
+}
+
+
 int main(int argc, const char * argv[]) {
 
     
