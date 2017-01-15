@@ -20,7 +20,6 @@ class List {
 public:
     List() : _head(nullptr){}; // empty list constructor
     List(T v, List tail) : _head(new Item(v, tail._head)){} ; // x:xs recursive constructor; tail won't change ever, it's persistent
-    explicit List(Item const * items) : _head(items) {} //private constructor used in pop_front()
 
     bool isEmpty() const {return !_head;}
     
@@ -35,11 +34,12 @@ public:
         return List(_head->_next);
     }
     
-    List push_front(T v) const { //returns a new list with v as head tail is same as before
+    List push_front(T v) const { //returns a new list with v as head, tail is same as the original list
         return List(v, *this);
     }
     
 private:
+    explicit List(Item const * items) : _head(items) {} //private constructor used in pop_front()
     //may be null
     Item const * _head; // shallow constness but meant to mean deep const by recursion
 };
