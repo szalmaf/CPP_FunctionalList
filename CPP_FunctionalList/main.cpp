@@ -44,6 +44,16 @@ private:
     std::shared_ptr<const Item> _head; // shallow constness but meant to mean deep const by recursion
 };
 
+template<class U, class T, class F>
+List <U> fmap(F f, List<T> lst)
+{
+    static_assert(std::is_convertible<F, std::function<U(T)>>::value, "fmap requires a function type U(T)");
+    if (lst.isEmpty())
+        return List<U>();
+    else
+        return List<U>(f(lst.front()), fmap<U>(f, lst.pop.front()));
+}
+
 
 int main(int argc, const char * argv[]) {
 
