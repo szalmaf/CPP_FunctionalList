@@ -7,6 +7,7 @@
 //
 
 #include <iostream>
+#include <cassert>
 
 
 template<class T>
@@ -18,7 +19,7 @@ class List {
         T _val;
         std::shared_ptr<const Item> _next;
     };
-    explicit List(Item const * items) : _head(items) {} //private constructor used in pop_front()
+    explicit List(std::shared_ptr<const Item> items) : _head(items) {} //private constructor used in pop_front()
     friend Item;
 public:
     List() {} // empty list constructor
@@ -48,13 +49,25 @@ private:
 };
 
 template<class U, class T, class F>
-List<U> fmap(F f, List<T> lst)
+List<U> fmap(F f, List<T> lst) // templated fmap function for List<T>
 {
     static_assert(std::is_convertible<F, std::function<U(T)>>::value, "fmap requires a function type U(T)");
     if (lst.isEmpty())
         return List<U>();
     else
         return List<U>(f(lst.front()), fmap<U>(f, lst.pop_front()));
+}
+
+template<class P, class T>
+List<T> filter(P p, List<T> lst)  // templated filter function for List<T> with predicate p
+{
+    static_assert(std::is_convertible<P, std::function<bool(T)>>::value, "Filter's predicate requires bool(T) function type");
+    if(lst.isEmpty())
+        return List<T>();
+    if(p(lst.front()))
+        return List<T>(lst.front(), filter(p, lst.pop_front()));
+    else
+        filter(p, lst.pop_front());
 }
 
 List<char> strToList(const std::string &str)
@@ -70,7 +83,7 @@ int main(int argc, const char * argv[]) {
     
 //    auto len = strlen(charLst)-1;
 //    auto charLst1 = std::for_each(charLst, &charLst[len], toupper);
-//    auto charLst2 = fmap<char>(toupper, charLst);
+    auto charLst2 = fmap<char>(toupper, charLst);
     
     return 0;
 }
