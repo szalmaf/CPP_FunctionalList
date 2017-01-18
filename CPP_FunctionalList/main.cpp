@@ -18,6 +18,7 @@ class List {
         T _val;
         std::shared_ptr<const Item> _next;
     };
+    explicit List(Item const * items) : _head(items) {} //private constructor used in pop_front()
     friend Item;
 public:
     List() {} // empty list constructor
@@ -42,7 +43,6 @@ public:
     }
     
 private:
-    explicit List(Item const * items) : _head(items) {} //private constructor used in pop_front()
     //may be null
     std::shared_ptr<const Item> _head; // shallow constness but meant to mean deep const by recursion
 };
@@ -59,7 +59,7 @@ List<U> fmap(F f, List<T> lst)
 
 List<char> strToList(const std::string &str)
 {
-    auto l = List<char>();
+    List<char> l;
     for_each(str.rbegin(), str.rend(), [&l](char c){ l = l.push_front(c); });
     return l;
 }
