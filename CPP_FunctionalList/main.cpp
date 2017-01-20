@@ -5,6 +5,7 @@
 //  Created by Ferenc Szalma on 1/14/17.
 //  Copyright © 2017 Ferenc Szalma. All rights reserved.
 //
+// https://bartoszmilewski.com/2013/11/13/functional-data-structures-in-c-lists/
 
 #include <iostream>
 #include <cassert>
@@ -20,7 +21,7 @@ class List {
         std::shared_ptr<const Item> _next;
     };
     explicit List(std::shared_ptr<const Item> items) : _head(items) {} //private constructor used in pop_front()
-    friend Item;
+//    friend Item;
 public:
     List() {} // empty list constructor
     List(T v, List const & tail) : _head(std::make_shared<Item>(v, tail._head)) {} // x:xs recursive constructor; tail won't change ever, it's persistent
